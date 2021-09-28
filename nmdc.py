@@ -3,7 +3,7 @@ import json
 import pandas as pd
 import os
 import sys
-from biokbase.WorkspaceClient import Workspace
+from biokbase.workspace.client import Workspace
 
 def _install_client():
     _base = "https://raw.githubusercontent.com/kbaseapps/GenericsAPI/master/lib/installed_clients"
