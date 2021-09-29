@@ -7,6 +7,7 @@ from biokbase.workspace.client import Workspace
 from yaml import load, Loader
 try:
     from biokbase.narrative.jobs.appmanager import AppManager
+    from IPython.display import Javascript
 except:
     pass
 
@@ -209,6 +210,23 @@ class NMDC:
                 continue
             results.append({"file_url": url})
         return results
+
+    def add_staging(self):
+        # Generate Staging App
+        import json
+        li = self.build_staging_url()
+        code = """
+                    Jupyter.narrative.addAndPopulateApp(
+                                    "kb_uploadmethods/upload_web_file",
+                                    'beta',
+                                    {
+                                    "download_type": "Direct Download",
+                                    "urls_to_add_web_unpack": %s
+                                    }
+                                );
+        """ % (json.dumps(li))
+        #print(li)
+        return Javascript(data=code, lib=None, css=None)
 
     def build_batch_import(self, max=None):
         # Build Batch Import
