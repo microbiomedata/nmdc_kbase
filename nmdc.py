@@ -234,10 +234,6 @@ class NMDC:
         amat = 'KBaseMetagenomes.AnnotatedMetagenomeAssembly'
         done = {}
         for obj in self.ws.list_objects({'ids': [self.wsid], "type": amat}):
-            otyp = obj[2].split('-')[0]
-            if otyp not in types:
-                continue
-            name = obj[1]
             done[obj[1]] = 1
         ct = 0
         batch_params = []
