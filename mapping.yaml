@@ -1,0 +1,19 @@
+
+Mapping:
+  name: id
+  description: name
+  latitude: latitude
+  longitude: longitude
+  biome: env_broad_scale_id
+  feature: env_local_scale_id
+  material: env_medium_id
+  "gold:study_id": study_id
+  depth_bgs: depth
+  collection_date: collection_date
+  "gold:ecosystem":  ecosystem
+  "gold:ecosystem_category": ecosystem_category
+  "gold:ecosystem_type": ecosystem_type
+  "gold:ecosystem_subtype": ecosystem_subtype
+  "gold:specific_ecosystem": specific_ecosystem
+  "gold:biosample_id": id
+

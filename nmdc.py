@@ -1,9 +1,15 @@
+from typing import OrderedDict
 import requests
 import json
 import pandas as pd
 import os
 import sys
 from biokbase.workspace.client import Workspace
+from yaml import load, Loader
+try:
+    from biokbase.narrative.jobs.appmanager import AppManager
+except:
+    pass
 
 def _install_client():
     _base = "https://raw.githubusercontent.com/kbaseapps/GenericsAPI/master/lib/installed_clients"
@@ -42,7 +48,7 @@ class NMDC:
                         "ext": "assembly_contigs.fna"
                       },
                    "Functional Annotation GFF": {
-                        "dirname": "annnotation",
+                        "dirname": "annotation",
                         "ext": "functional_annotation.gff"
                       }}
 
@@ -54,6 +60,7 @@ class NMDC:
         self.samples = self._find_samples()
         self.oid2sid = self._build_sample_map()
         self.headers = {"Authorization": os.environ["KB_AUTH_TOKEN"]}
+        self.mapping = load(open('mapping.yaml'), Loader=Loader)
 
     # Query NMDC for samples related to this study
     def _find_samples(self):
@@ -91,6 +98,34 @@ class NMDC:
                         oid2sid[oid] = sid
         return oid2sid
 
+    # Generate Sample TSV and store in Staging
+    def make_samples(self):
+        mapping = self.mapping["Mapping"]
+        headings = mapping.keys()
+        data = []
+        data.append("\t".join(headings))
+        for sample in self.samples:
+            has_meta = False
+            for op in sample['omics_processing']:
+                if op['annotations']['omics_type'] == "Metagenome":
+                    has_meta = True
+            if not has_meta:
+                continue
+            row = []
+            # Workaround
+            if sample['env_local_scale_id'] in ['ENVO:01000621']:
+                sample['env_local_scale_id'] = ""
+            for c in headings:
+                row.append(str(sample[mapping[c]]))
+            data.append('\t'.join(row))
+        url = "%s/upload" % (self._staging)
+        fn = os.path.join("/tmp", "%s.tsv" % (self.study_id))
+        with open(fn, "w") as f:
+            f.write('\n'.join(data))
+        params = {'destPath': '/'}
+        files = {"uploads": open(fn, "rb")}
+        resp = requests.post(url, headers=self.headers, data=params, files=files)
+        return resp.json()
 
     # Make a table of the samples
     # Just focus on the ones with Metagenomes for now.
@@ -177,6 +212,14 @@ class NMDC:
     def build_batch_import(self, max=None):
         # Build Batch Import
         # TODO: Make it skip existing items
+        amat = 'KBaseMetagenomes.AnnotatedMetagenomeAssembly'
+        done = {}
+        for obj in self.ws.list_objects({'ids': [self.wsid], "type": amat}):
+            otyp = obj[2].split('-')[0]
+            if otyp not in types:
+                continue
+            name = obj[1]
+            done[obj[1]] = 1
         ct = 0
         batch_params = []
         ext = "_functional_annotation.gff"
@@ -185,10 +228,13 @@ class NMDC:
                 fn = link.split('/')[-1]
                 ct += 1
                 id = fn.replace(ext, '')
+                oname = "%s_metagenome" % (id)
+                if oname in done:
+                    continue
                 p = {
                     "fasta_file": "%s_assembly_contigs.fna" % (id),
                     "gff_file": "%s_functional_annotation.gff" % (id),
-                    "genome_name": "%s_metagenome" % (id),
+                    "genome_name": oname,
                     "source": "Other",
                     "release": "",
                     "genetic_code": None,
@@ -198,6 +244,17 @@ class NMDC:
                 if max and ct >= max:
                     break
         return batch_params
+
+    def make_bulk_import(self):
+        return AppManager().run_app_bulk(
+            [{
+                "app_id": "kb_uploadmethods/import_gff_fasta_as_metagenome_from_staging",
+                "tag": "release",
+                "params": self.build_batch_import()
+            }],
+            cell_id="e3d8288a-9191-48c3-b39d-271306b0eda1",
+            run_id="c4198db6-1566-4aed-83e7-92b61069affb"
+        )
 
     # Link Objects
     def link_objects(self, dryrun=False):
@@ -238,9 +295,11 @@ class NMDC:
 
 if __name__ == "__main__":
     n = NMDC("gold:Gs0114663")
+    #print(n.make_samples())
     for l in n.get_urls():
         print(l)
-    print(len(n.build_staging_url()))
+    print(n.build_staging_url())
+    sys.exit()
     print(json.dumps(n.build_batch_import(max=5), indent=2))
     print(n.make_table())
     n.link_objects(dryrun=True)
