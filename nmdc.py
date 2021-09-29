@@ -59,7 +59,9 @@ class NMDC:
         self.samples = self._find_samples()
         self.oid2sid = self._build_sample_map()
         self.headers = {"Authorization": os.environ["KB_AUTH_TOKEN"]}
-        self.mapping = load(open('mapping.yaml'), Loader=Loader)
+        m = "https://raw.githubusercontent.com/microbiomedata/nmdc_kbase/main/mapping.yaml"
+        resp = requests.get(m)
+        self.mapping = load(resp.text, Loader=Loader)
 
     # Query NMDC for samples related to this study
     def _find_samples(self):
