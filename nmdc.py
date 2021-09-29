@@ -170,10 +170,15 @@ class NMDC:
         headers = {"Range": "bytes=0-100"}  # first 100 bytes
         results = []
         for sample in self.samples:
+            has_meta = False
             for op in sample['omics_processing']:
                 # We just handle metagenome processing for now
-                if op['annotations']['omics_type'] != "Metagenome":
-                    continue
+                # This assume there is just one Metagenome though
+                if op['annotations']['omics_type'] == "Metagenome":
+                    has_meta = True
+                    break
+            if not has_meta:
+                continue
             oid = self._get_oid(op)
             urlbase = "%sdata/%s" % (self._nmdc_url, oid)
             for act in op['omics_data']:
@@ -310,11 +315,13 @@ class NMDC:
 
 if __name__ == "__main__":
     n = NMDC("gold:Gs0114663")
+    print(len(n.samples))
+    print(len(n.get_urls()))
+    sys.exit()
     #print(n.make_samples())
     for l in n.get_urls():
         print(l)
     print(n.build_staging_url())
-    sys.exit()
     print(json.dumps(n.build_batch_import(max=5), indent=2))
     print(n.make_table())
     n.link_objects(dryrun=True)
