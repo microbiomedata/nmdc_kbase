@@ -1,0 +1,379 @@
+{
+  "cell_type": "code",
+  "execution_count": null,
+  "metadata": {
+    "kbase": {
+      "attributes": {
+        "created": "Sat, 02 Oct 2021 16:47:48 GMT",
+        "id": "",
+        "lastLoaded": "Sat, 02 Oct 2021 16:47:48 GMT",
+        "status": "new",
+        "subtitle": "Import files into your Narrative as data objects",
+        "title": "Import from Staging Area"
+      },
+      "bulkImportCell": {
+        "app": {
+          "fileParamIds": {
+            "gff_metagenome": [
+              "fasta_file",
+              "gff_file",
+              "genome_name"
+            ]
+          },
+          "otherParamIds": {
+            "gff_metagenome": [
+              "source",
+              "release",
+              "genetic_code",
+              "generate_missing_genes"
+            ]
+          },
+          "outputParamIds": {
+            "gff_metagenome": [
+              "genome_name"
+            ]
+          },
+          "specs": {
+            "kb_uploadmethods/import_gff_fasta_as_metagenome_from_staging": {
+              "behavior": {
+                "kb_service_input_mapping": [
+                  {
+                    "narrative_system_variable": "workspace",
+                    "target_property": "workspace_name"
+                  },
+                  {
+                    "input_parameter": "fasta_file",
+                    "target_property": "fasta_file"
+                  },
+                  {
+                    "input_parameter": "gff_file",
+                    "target_property": "gff_file"
+                  },
+                  {
+                    "input_parameter": "genome_name",
+                    "target_property": "genome_name"
+                  },
+                  {
+                    "input_parameter": "source",
+                    "target_property": "source"
+                  },
+                  {
+                    "input_parameter": "release",
+                    "target_property": "release"
+                  },
+                  {
+                    "input_parameter": "genetic_code",
+                    "target_property": "genetic_code"
+                  },
+                  {
+                    "input_parameter": "generate_missing_genes",
+                    "target_property": "generate_missing_genes"
+                  }
+                ],
+                "kb_service_method": "upload_metagenome_fasta_gff_file",
+                "kb_service_name": "kb_uploadmethods",
+                "kb_service_output_mapping": [
+                  {
+                    "service_method_output_path": [
+                      "0",
+                      "report_name"
+                    ],
+                    "target_property": "report_name"
+                  },
+                  {
+                    "service_method_output_path": [
+                      "0",
+                      "report_ref"
+                    ],
+                    "target_property": "report_ref"
+                  }
+                ],
+                "kb_service_url": "",
+                "kb_service_version": "31e93066beb421a51b9c8e44b1201aa93aea0b4e"
+              },
+              "fixed_parameters": [],
+              "full_info": {
+                "app_type": "app",
+                "authors": [
+                  "slebras"
+                ],
+                "categories": [
+                  "inactive",
+                  "assembly",
+                  "upload"
+                ],
+                "contact": "http://kbase.us/contact-us/",
+                "description": "Import a GFF or FASTA file from your staging area into your Narrative as a Genome data object. \nPlease see the Data Upload/Download Guide for more information.",
+                "git_commit_hash": "31e93066beb421a51b9c8e44b1201aa93aea0b4e",
+                "icon": {
+                  "url": "img?method_id=kb_uploadmethods/import_gff_fasta_as_metagenome_from_staging&image_name=data-red.png&tag=release"
+                },
+                "id": "kb_uploadmethods/import_gff_fasta_as_metagenome_from_staging",
+                "module_name": "kb_uploadmethods",
+                "name": "Import GFF3/FASTA file as Annotated Metagenome Assembly from Staging Area",
+                "namespace": "kb_uploadmethods",
+                "publications": [],
+                "screenshots": [],
+                "subtitle": "Import a GFF3 and FASTA file from your staging area into your Narrative as an Annotated Metagenome Assembly data object",
+                "suggestions": {
+                  "next_apps": [],
+                  "next_methods": [],
+                  "related_apps": [],
+                  "related_methods": []
+                },
+                "technical_description": "none",
+                "tooltip": "Import a GFF3 and FASTA file from your staging area into your Narrative as an Annotated Metagenome Assembly data object",
+                "ver": "1.0.52"
+              },
+              "info": {
+                "app_type": "app",
+                "authors": [
+                  "slebras"
+                ],
+                "categories": [
+                  "inactive",
+                  "assembly",
+                  "upload"
+                ],
+                "git_commit_hash": "31e93066beb421a51b9c8e44b1201aa93aea0b4e",
+                "icon": {
+                  "url": "img?method_id=kb_uploadmethods/import_gff_fasta_as_metagenome_from_staging&image_name=data-red.png&tag=release"
+                },
+                "id": "kb_uploadmethods/import_gff_fasta_as_metagenome_from_staging",
+                "input_types": [],
+                "module_name": "kb_uploadmethods",
+                "name": "Import GFF3/FASTA file as Annotated Metagenome Assembly from Staging Area",
+                "namespace": "kb_uploadmethods",
+                "output_types": [
+                  "KBaseMetagenomes.AnnotatedMetagenomeAssembly"
+                ],
+                "subtitle": "Import a GFF3 and FASTA file from your staging area into your Narrative as an Annotated Metagenome Assembly data object",
+                "tooltip": "Import a GFF3 and FASTA file from your staging area into your Narrative as an Annotated Metagenome Assembly data object",
+                "ver": "1.0.52"
+              },
+              "job_id_output_field": "docker",
+              "parameters": [
+                {
+                  "advanced": 0,
+                  "allow_multiple": 0,
+                  "default_values": [
+                    ""
+                  ],
+                  "description": "Valid file extensions for FASTA: .fasta, .fna, .fa; Compressed files (containing files with vaild extentions): .zip, .gz, .bz2, .tar.gz, .tar.bz2. Note that the FASTA file must contain sequences for contigs which match the seq_id in the gff file not sequences for every individual feature.",
+                  "disabled": 0,
+                  "dynamic_dropdown_options": {
+                    "data_source": "ftp_staging",
+                    "multiselection": 0,
+                    "query_on_empty_input": 1,
+                    "result_array_index": 0,
+                    "service_params": null
+                  },
+                  "field_type": "dynamic_dropdown",
+                  "id": "fasta_file",
+                  "optional": 0,
+                  "short_hint": "FASTA File containing assembled contigs or chromosomes (NOT feature sequences)",
+                  "ui_class": "parameter",
+                  "ui_name": "FASTA File Path"
+                },
+                {
+                  "advanced": 0,
+                  "allow_multiple": 0,
+                  "default_values": [
+                    ""
+                  ],
+                  "description": "Valid file extensions for GFF: .gff, .gff3. Compressed files (containing files with valid extensions): .zip, .gz, .bz2, .tar.gz, .tar.bz2. Note that older versions of GFF files may also have the .gff extension but have a differing schema which could result in incorrect upload. Always use GFF3 where possible",
+                  "disabled": 0,
+                  "dynamic_dropdown_options": {
+                    "data_source": "ftp_staging",
+                    "multiselection": 0,
+                    "query_on_empty_input": 1,
+                    "result_array_index": 0,
+                    "service_params": null
+                  },
+                  "field_type": "dynamic_dropdown",
+                  "id": "gff_file",
+                  "optional": 0,
+                  "short_hint": "GFF3 File containing list of predicted gene models and associated features",
+                  "ui_class": "parameter",
+                  "ui_name": "GFF3 File Path"
+                },
+                {
+                  "advanced": 0,
+                  "allow_multiple": 0,
+                  "default_values": [
+                    ""
+                  ],
+                  "description": "Provide a name for the output object that will be created by this upload",
+                  "disabled": 0,
+                  "field_type": "text",
+                  "id": "genome_name",
+                  "optional": 0,
+                  "short_hint": "Provide a name for the output object that will be created by this upload",
+                  "text_options": {
+                    "is_output_name": 1,
+                    "placeholder": "",
+                    "regex_constraint": [],
+                    "valid_ws_types": [
+                      "KBaseMetagenomes.AnnotatedMetagenomeAssembly"
+                    ]
+                  },
+                  "ui_class": "output",
+                  "ui_name": "Metagenome Object Name"
+                },
+                {
+                  "advanced": 0,
+                  "allow_multiple": 0,
+                  "default_values": [
+                    "Other"
+                  ],
+                  "description": "Source of the metagenome data, (JGI, EBI, etc.)",
+                  "disabled": 0,
+                  "dropdown_options": {
+                    "multiselection": 0,
+                    "options": [
+                      {
+                        "display": "EBI",
+                        "value": "EBI user"
+                      },
+                      {
+                        "display": "IMG",
+                        "value": "IMG user"
+                      },
+                      {
+                        "display": "JGI",
+                        "value": "JGI user"
+                      },
+                      {
+                        "display": "BGI (Beijing Genomics)",
+                        "value": "BGI user"
+                      },
+                      {
+                        "display": "Other",
+                        "value": "Other"
+                      }
+                    ]
+                  },
+                  "field_type": "dropdown",
+                  "id": "source",
+                  "optional": 0,
+                  "short_hint": "Source of the metagenome data",
+                  "ui_class": "parameter",
+                  "ui_name": "Source of metagenome"
+                },
+                {
+                  "advanced": 1,
+                  "allow_multiple": 0,
+                  "default_values": [
+                    ""
+                  ],
+                  "description": "Release or version of the source data (for example: Release31, V4)",
+                  "disabled": 0,
+                  "field_type": "text",
+                  "id": "release",
+                  "optional": 1,
+                  "short_hint": "Release or version of the source data (for example: Release31, V4)",
+                  "ui_class": "parameter",
+                  "ui_name": "Release or Version of the Source Data"
+                },
+                {
+                  "advanced": 1,
+                  "allow_multiple": 0,
+                  "default_values": [
+                    ""
+                  ],
+                  "description": "Valid genetic code integer for translation purposes (see http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi)",
+                  "disabled": 0,
+                  "field_type": "text",
+                  "id": "genetic_code",
+                  "optional": 1,
+                  "short_hint": "Valid genetic code (see http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi)",
+                  "text_options": {
+                    "is_output_name": 0,
+                    "placeholder": "",
+                    "regex_constraint": [],
+                    "validate_as": "int"
+                  },
+                  "ui_class": "parameter",
+                  "ui_name": "Genetic Code for protein translation"
+                },
+                {
+                  "advanced": 1,
+                  "allow_multiple": 0,
+                  "checkbox_options": {
+                    "checked_value": 1,
+                    "unchecked_value": 0
+                  },
+                  "default_values": [
+                    "1"
+                  ],
+                  "description": "Some files may contain only coding sequences but KBase genomes are\nexpected to contain a parent gene for these CDS. This option\ngenerates spoof genes based on the CDS location.",
+                  "disabled": 0,
+                  "field_type": "checkbox",
+                  "id": "generate_missing_genes",
+                  "optional": 1,
+                  "short_hint": "Generate gene feature for CDSs that do not have a parent in file",
+                  "ui_class": "parameter",
+                  "ui_name": "Spoof Genes for parentless CDS"
+                }
+              ],
+              "widgets": {
+                "input": "null",
+                "output": "no-display"
+              }
+            }
+          },
+          "tag": "release"
+        },
+        "exec": {
+          "jobState": {},
+          "jobs": {
+            "byId": {}
+          }
+        },
+        "inputs": {
+          "gff_metagenome": {
+            "appId": "kb_uploadmethods/import_gff_fasta_as_metagenome_from_staging",
+            "files": [
+              "xxx_functional_annotation.gff",
+              "xxx_assembly_contigs.fna"
+            ]
+          }
+        },
+        "params": {
+          "gff_metagenome": {
+            "filePaths": [
+              {
+                "fasta_file": "xxx_assembly_contigs.fna",
+                "genome_name": "xxx_metagenome",
+                "gff_file": "xxx_functional_annotation.gff"
+              }
+            ],
+            "params": {
+              "generate_missing_genes": 1,
+              "genetic_code": null,
+              "release": "",
+              "source": "Other"
+            }
+          }
+        },
+        "state": {
+          "params": {
+            "gff_metagenome": "complete"
+          },
+          "selectedFileType": "gff_metagenome",
+          "selectedTab": "viewConfigure",
+          "state": "inProgress"
+        },
+        "user-settings": {
+          "showCodeInputArea": false
+        }
+      },
+      "cellState": {
+        "toggleMinMax": "minimized"
+      },
+      "type": "app-bulk-import"
+    }
+  },
+  "outputs": [],
+  "source": "from biokbase.narrative.jobs.appmanager import AppManager\nAppManager().run_app_bulk(\n    [{\n        \"app_id\": \"kb_uploadmethods/import_gff_fasta_as_metagenome_from_staging\",\n        \"tag\": \"release\",\n        \"version\": \"1.0.52\",\n        \"params\": [{\n            \"fasta_file\": \"xxx_assembly_contigs.fna\",\n            \"gff_file\": \"xxx_functional_annotation.gff\",\n            \"genome_name\": \"xxx_metagenome\",\n            \"source\": \"Other\",\n            \"release\": \"\",\n            \"genetic_code\": None,\n            \"generate_missing_genes\": 1\n        }]\n    }],\n    cell_id=\"8d5cd2ef-0d73-4612-9951-5e2356b6b5d7\",\n    run_id=\"3f30ea6e-3009-4a0d-8519-f14ccc4d2785\"\n)"
+}

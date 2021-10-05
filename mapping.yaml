@@ -17,3 +17,47 @@ Mapping:
   "gold:specific_ecosystem": specific_ecosystem
   "gold:biosample_id": id
 
+Imports:
+  metagenome:
+    name: genome_name
+    default_params:
+      generate_missing_genes: 1
+      genetic_code:
+      release: ""
+      source: Other
+
+
+Files:
+  metagenome:
+    Assembly:
+      dirname: assembly
+      ext: assembly_contigs.fna
+      param: fasta_file
+    GFF:
+      dirname: annotation
+      ext: functional_annotation.gff
+      param: gff_file
+
+Linking:
+  KBaseMetagenomes.AnnotatedMetagenomeAssembly:
+    ext: _metagenome
+  KBaseGenomeAnnotations.Assembly:
+    ext: _metagenome.assembly
+
+Table:
+  Columns:
+  - id
+  - name
+  - latitude
+  - longitude
+  - env_broad_scale_id
+  - env_local_scale_id
+  - env_medium_id
+  - study_id
+  - depth
+  - collection_date
+  - ecosystem
+  - ecosystem_category
+  - ecosystem_type
+  - ecosystem_subtype
+  - specific_ecosystem
