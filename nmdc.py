@@ -110,6 +110,7 @@ class NMDC:
         self.ss = SampleService("%s/sampleservice" % (self._service_url))
         self.ee = execution_engine2("%s/ee2-nr" % (self._service_url))
         self.study = None
+        self.data_citation = None
         # self.get_study_info()
         self.o_samples = None
         self.headers = {"Authorization": os.environ["KB_AUTH_TOKEN"]}
@@ -187,7 +188,7 @@ class NMDC:
             row = []
             # Workaround
             sinfo = sample.sample_info
-            if sinfo['env_local_scale_id'] in ['ENVO:01000621']:
+            if sinfo['env_local_scale_id'] in ['ENVO:01000621', 'ENVO:00000108']:
                 sinfo['env_local_scale_id'] = ""
             for c in headings:
                 row.append(str(sinfo[mapping[c]]))
@@ -644,6 +645,32 @@ class NMDC:
 
         return text
 
+    def _get_citations(self):
+        if not self.study:
+            self.get_study_info()
+        publ = self.study['publication_doi_info']
+        self.data_citation = []
+        for p, pub in publ.items():
+            if pub.get("type") == "dataset":
+                cite = dict()
+                for f in ["DOI", "id", "URL", "title"]:
+                    if f in pub:
+                        cite[f] = pub[f]
+                self.data_citation.append(cite)
+
+    def _add_citation(self):
+        if not self.data_citation:
+            self._get_citations()
+        if len(self.data_citation) < 1:
+            return
+        metadata = self.ws.get_workspace_info({"id": self.wsid})[8]
+        c0 = self.data_citation[0]
+        for f in ["DOI", "URL", "title"]:
+            if f in c0:
+                metadata['data_citation_%s' % (f)] = c0[f]
+        print(metadata)
+        self.ws.alter_workspace_metadata({"wsi": {"id": self.wsid}, 'new': metadata})
+
     def initialize_narrative(self):
         """
         Initialize the narrative.  If the study hasn't yet been
@@ -709,24 +736,31 @@ class NMDC:
             "meta": usermeta
             }
         resp = self.ws.save_objects({"id": self.wsid, "objects": [obj]})
+        self._add_citation()
         return resp
 
 
 if __name__ == "__main__":
-    n = NMDC("gold:Gs0114663")
+    # n = NMDC("gold:Gs0114663")
+    n = NMDC("gold:Gs0135149")
     n.initialize_narrative()
     # n.append_to_log("This is a test")
-    # n.find_new_data()
     n.build_sample_map()
-    # n.link_objects()
+    n.make_samples()
+    #n.find_new_data()
+    # n._get_citations()
+    # print(n.data_citation)
+    # n._add_citation()
+    # sys.exit()
+    n.link_objects()
     # n.get_urls()
     # print(n.make_table())
-    sams = []
-    for i in ["1781_100347", "1781_86097",
-              "1781_86098", "1781_100341",
-              "1781_100327"]:
-        sams.append(n.oid2sample[i])
-    n.submit_import(sams, dryrun=True)
+    # sams = []
+    # for i in ["1781_100347", "1781_86097",
+    #           "1781_86098", "1781_100341",
+    #           "1781_100327"]:
+    #     sams.append(n.oid2sample[i])
+    # n.submit_import(sams, dryrun=True)
     # cell_id = "15eaa207-c957-43a9-aa25-5ac8a6a0950f"
     # job_id = "615ba2f124131f13b740b76e"
     # n.add_batch_cell(sams, cell_id, None, job_id)
